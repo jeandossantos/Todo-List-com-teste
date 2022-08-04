@@ -13,9 +13,9 @@ export default class TaskRepositoryInMemory implements ITaskRepository {
     return task;
   }
 
-  async findByName(userId: string, search?: string) {
+  async findByName(userId: string, page: number, name?: string) {
     const tasks = this.items.filter(
-      (task) => task.userId === userId && task.name.startsWith(search)
+      (task) => task.userId === userId && task.name.startsWith(name)
     );
 
     return { tasks, limit: 4, count: 10 };

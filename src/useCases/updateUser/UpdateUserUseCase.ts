@@ -1,3 +1,4 @@
+import { CustomException } from '../../exceptions/CustomException';
 import { IUserRepository } from '../../repositories/userRepository/IUserRepository';
 import { existsOrError } from '../../utils/validators';
 
@@ -8,13 +9,15 @@ export class UpdateUserUseCase {
     existsOrError(name, 'The name is required!');
 
     if (initials.trim().length !== 2) {
-      throw new Error('The initials must have at least 2 characters!');
+      throw new CustomException(
+        'The initials must have at least 2 characters!'
+      );
     }
 
     const regex = new RegExp(/[0-9]/);
 
     if (regex.test(initials.trim())) {
-      throw new Error('The initials must not contain numbers!');
+      throw new CustomException('The initials must not contain numbers!');
     }
 
     const user = await this.userRepository.findById(userId);

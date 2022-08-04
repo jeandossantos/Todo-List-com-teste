@@ -35,7 +35,6 @@ describe('Update Task', () => {
   it('Should be able to update a task', async () => {
     const taskData = {
       id: task.id,
-      userId: user.id,
       name: 'Update Task',
       description: 'Some description',
       done: true,
@@ -51,7 +50,6 @@ describe('Update Task', () => {
   it('Should not be able to update without a name', async () => {
     const taskData = {
       id: task.id,
-      userId: user.id,
       name: '',
       description: 'Some description',
       done: true,
@@ -65,7 +63,6 @@ describe('Update Task', () => {
   it('Should not be able to update without a task ID', async () => {
     const taskData = {
       id: '',
-      userId: user.id,
       name: 'Update without a id',
       description: 'Some description',
       done: true,
@@ -74,19 +71,5 @@ describe('Update Task', () => {
     const response = updateTask.execute(taskData);
 
     expect(response).rejects.toThrowError(new Error('Task ID is required!'));
-  });
-
-  it('Should not be able to update without a task ID', async () => {
-    const taskData = {
-      id: task.id,
-      userId: '',
-      name: 'Update without a user id',
-      description: 'Some description',
-      done: true,
-    };
-
-    const response = updateTask.execute(taskData);
-
-    expect(response).rejects.toThrowError(new Error('User ID is required!'));
   });
 });

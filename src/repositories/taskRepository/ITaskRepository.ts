@@ -1,6 +1,6 @@
 import { Task } from '../../entities/Task';
 
-type PaginatedTasks = {
+export type PaginatedTasks = {
   tasks: Task[];
   count: number;
   limit: number;
@@ -8,7 +8,11 @@ type PaginatedTasks = {
 
 export default interface ITaskRepository {
   create: (task: Task) => Promise<Task>;
-  findByName: (userId: string, name?: string) => Promise<PaginatedTasks>;
+  findByName: (
+    userId: string,
+    page: number,
+    name?: string
+  ) => Promise<PaginatedTasks>;
   remove: (taskId: string) => Promise<Task>;
-  update: (task: Task) => Promise<Task>;
+  update: (task: Omit<Task, 'userId'>) => Promise<Task>;
 }

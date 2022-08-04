@@ -1,3 +1,4 @@
+import { CustomException } from '../../exceptions/CustomException';
 import { IUserRepository } from '../../repositories/userRepository/IUserRepository';
 
 export class RemoveUserUseCase {
@@ -11,7 +12,7 @@ export class RemoveUserUseCase {
     const userExists = await this.userRepository.findById(userId);
 
     if (!userExists) {
-      throw new Error('User not exists!');
+      throw new CustomException('User not exists!');
     }
 
     const user = await this.userRepository.remove(userId);

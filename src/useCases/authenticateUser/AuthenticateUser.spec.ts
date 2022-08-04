@@ -61,7 +61,7 @@ describe('Authenticate User', () => {
 
     await expect(
       authenticateUserUseCase.execute(email, password)
-    ).rejects.toEqual(new Error('E-mail not registered.'));
+    ).rejects.toEqual(new Error('E-mail not registered!'));
   });
 
   it('should not be able to authenticate with an incorrect password', async () => {

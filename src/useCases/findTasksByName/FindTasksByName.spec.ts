@@ -37,7 +37,11 @@ beforeAll(async () => {
 
 describe('Find tasks by name', () => {
   it('Should be able to find tasks by name', async () => {
-    const response = await findTasksByNameUseCase.execute(user.id, 'Task - 1');
+    const response = await findTasksByNameUseCase.execute(
+      user.id,
+      1,
+      'Task - 1'
+    );
 
     expect(response).toHaveProperty('tasks');
     expect(response).toHaveProperty('count');
@@ -53,7 +57,7 @@ describe('Find tasks by name', () => {
   });
 
   it('Should not be able to find tasks by name without a user ID', async () => {
-    const response = findTasksByNameUseCase.execute('', 'Task - 1');
+    const response = findTasksByNameUseCase.execute('', 1, 'Task - 1');
 
     expect(response).rejects.toThrowError(new Error('User ID is required!'));
   });

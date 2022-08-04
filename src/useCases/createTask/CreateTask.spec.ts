@@ -1,11 +1,23 @@
-import { Task } from '../../entities/Task';
+import { User } from '../../entities/User';
 import TaskRepositoryInMemory from '../../repositories/InMemory/TaskRepositoryInMemory';
+import { UserRepositoryInMemory } from '../../repositories/InMemory/UserRepositoryInMemory';
 import { CreateTaskUseCase } from './CreateTaskUseCase';
 
 const taskRepository = new TaskRepositoryInMemory();
+const userRepository = new UserRepositoryInMemory();
 const createTaskUseCase = new CreateTaskUseCase(taskRepository);
+let user: User;
 
-beforeEach(() => (taskRepository.items = []));
+beforeEach(async () => {
+  taskRepository.items = [];
+
+  user = await userRepository.create({
+    name: 'create task test unit',
+    email: 'testecreateTask@test.com',
+    initials: 'CT',
+    password: '40028922',
+  });
+});
 
 describe('Create Task', () => {
   it('Should be able to create a new task', async () => {
@@ -14,6 +26,7 @@ describe('Create Task', () => {
       description: 'Testando a criação de tarefa',
       deadline: new Date(),
       done: true,
+      userId: user.id,
     };
 
     const response = await createTaskUseCase.execute(task);
@@ -28,6 +41,7 @@ describe('Create Task', () => {
       description: '',
       deadline: new Date(),
       done: true,
+      userId: user.id,
     };
 
     const response = await createTaskUseCase.execute(task);
@@ -41,6 +55,7 @@ describe('Create Task', () => {
       name: 'Tarefa de Teste',
       description: '',
       done: true,
+      userId: user.id,
     };
 
     const response = await createTaskUseCase.execute(task);
@@ -53,6 +68,7 @@ describe('Create Task', () => {
     const task = {
       name: 'Tarefa de Teste',
       description: 'Testando done',
+      userId: user.id,
     };
 
     const response = await createTaskUseCase.execute(task);
@@ -67,10 +83,25 @@ describe('Create Task', () => {
       description: '',
       deadline: new Date(),
       done: true,
+      userId: user.id,
     };
 
     const response = createTaskUseCase.execute(task);
 
     await expect(response).rejects.toEqual(new Error('Name is required!'));
+  });
+
+  it('Should not be able to create a new task without a user ID', async () => {
+    const task = {
+      name: '',
+      description: '',
+      deadline: new Date(),
+      done: true,
+      userId: '',
+    };
+
+    const response = createTaskUseCase.execute(task);
+
+    await expect(response).rejects.toEqual(new Error('User ID is required!'));
   });
 });
